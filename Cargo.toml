@@ -1,0 +1,24 @@
+[package]
+name = "pangpang"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[[example]]
+name = "tunnel"
+
+
+[dependencies]
+log = "0.4"
+russh = "0.34.0-beta.5"
+russh-keys = "0.22.0-beta.2"
+tokio = { version = "1", features = ["full"]}
+tokio-stream = "0.1"
+async-trait = "0.1"
+serde = "1.0.137"
+serde_derive = "1.0.137"
+anyhow = "1.0"
+async-recursion = "1.0.0"
+hyper = { version = "0.14", features = ["full"] }
+env_logger = "0.9.0"
