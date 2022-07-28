@@ -4,7 +4,6 @@ use pangpang::storage::Storage;
 
 #[tokio::main]
 async fn main() {
-    env_logger::init();
     let profile = pangpang::profile::Profile {
         transport: None,
         protocol: pangpang::profile::Protocol::Ssh(

@@ -9,7 +9,7 @@ pub struct Server {
 }
 
 impl Server {
-    pub fn shutdown(&mut self) {
+    pub fn shutdown(&self) {
         self.notify.notify_one();
     }
 

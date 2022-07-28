@@ -3,6 +3,9 @@
 mod http;
 pub use http::Server as Http;
 
+mod socks;
+pub use socks::Server as Socks;
+
 use super::storage::Storage;
 use super::manager::Manager;
 

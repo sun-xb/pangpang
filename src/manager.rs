@@ -40,6 +40,21 @@ impl<S: for<'a> super::storage::Storage<'a> + 'static> Manager<S> {
         let tunnel_service = super::tunnel::Http::run(listener, super::tunnel::StreamConnector::new(self.clone(), remote));
         Ok(tunnel_service)
     }
+
+    pub async fn open_socks_tunnel(&self, listen_addr: std::net::SocketAddr, local: Option<&String>, remote: Option<String>) -> Result<super::tunnel::Socks> {
+        let listener = match local {
+            Some(id) => {
+                let mut s = self.open_session(id).await?;
+                s.remote_listener(listen_addr).await?
+            }
+            None => {
+                let l = tokio::net::TcpListener::bind(listen_addr).await?;
+                super::session::Listener::Local(l)
+            }
+        };
+        let tunnel_service = super::tunnel::Socks::run(listener, super::tunnel::StreamConnector::new(self.clone(), remote));
+        Ok(tunnel_service)
+    }
 }
 
 
