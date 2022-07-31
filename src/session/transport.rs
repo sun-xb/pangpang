@@ -3,7 +3,7 @@ use std::pin::Pin;
 
 pub enum AsyncStream {
     Tcp(tokio::net::TcpStream),
-    Ssh(super::ssh::SshStream)
+    Ssh(super::ssh::SSHStream)
 }
 impl tokio::io::AsyncRead for AsyncStream {
     fn poll_read(

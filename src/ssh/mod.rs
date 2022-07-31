@@ -6,10 +6,12 @@ mod handler;
 mod profile;
 mod stream;
 mod listener;
+mod pty;
 
 pub use profile::Profile;
-pub use stream::SshStream;
+pub use stream::SSHStream;
 pub use listener::RemoteListener;
+pub use pty::SSHPty;
 
 pub struct Session {
     handle: client::Handle<handler::Handler>
@@ -24,12 +26,15 @@ impl Session {
         Ok(Self{ handle })
     }
 
-    pub async fn local_tunnel(&mut self, host: &str, port: u16) -> Result<client::Channel, russh::Error> {
+    pub async fn local_tunnel(&mut self, host: &str, port: u16) -> Result<russh::Channel<client::Msg>, russh::Error> {
         self.handle.channel_open_direct_tcpip(host, port.into(), "0.0.0.0", 0).await
     }
 
     pub async fn remote_bind(&mut self, addr: std::net::SocketAddr) -> Result<RemoteListener, russh::Error> {
-        let ch = self.handle.channel_open_session().await?;
-        Ok(RemoteListener::new(ch, addr))
+        if self.handle.tcpip_forward(addr.ip().to_string(), addr.port() as u32).await? {
+            Ok(RemoteListener::new(addr))
+        } else {
+            Err(russh::Error::HUP)
+        }
     }
 }

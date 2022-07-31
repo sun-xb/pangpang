@@ -1,20 +1,19 @@
 use std::future::Future;
 
 use russh::ChannelMsg;
-use russh::client::Channel;
 use tokio::io::{AsyncWrite, AsyncRead};
 
 
 
-pub struct SshStream {
-    channel: Channel,
+pub struct SSHStream {
+    pub(super) channel: russh::Channel<russh::client::Msg>,
     read_buf: Vec<u8>,
     buffer_offset: usize,
     buffer_end: usize,
 }
 
-impl From<Channel> for SshStream {
-    fn from(ch: Channel) -> Self {
+impl From<russh::Channel<russh::client::Msg>> for SSHStream {
+    fn from(ch: russh::Channel<russh::client::Msg>) -> Self {
         Self {
             channel: ch,
             read_buf: Vec::new(),
@@ -24,7 +23,7 @@ impl From<Channel> for SshStream {
     }
 }
 
-impl AsyncWrite for SshStream {
+impl AsyncWrite for SSHStream {
     fn poll_write(
         self: std::pin::Pin<&mut Self>,
         cx: &mut std::task::Context<'_>,
@@ -60,7 +59,7 @@ impl AsyncWrite for SshStream {
     }
 }
 
-impl AsyncRead for SshStream {
+impl AsyncRead for SSHStream {
     fn poll_read(
         self: std::pin::Pin<&mut Self>,
         cx: &mut std::task::Context<'_>,

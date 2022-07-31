@@ -14,7 +14,7 @@ use super::session::AsyncStream;
 
 
 #[derive(Clone)]
-pub struct StreamConnector<S: for<'a> Storage<'a> + 'static> {
+pub struct StreamConnector<S> {
     mgr: Manager<S>,
     id: Option<String>,
 }

@@ -8,4 +8,4 @@ pub mod storage;
 pub mod session;
 pub mod tunnel;
 pub mod manager;
-
+pub mod terminal;

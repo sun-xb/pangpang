@@ -2,7 +2,7 @@
 use anyhow::Result;
 
 #[derive(Clone)]
-pub struct Manager<S: for<'a> super::storage::Storage<'a> + 'static> {
+pub struct Manager<S> {
     storage: S,
 }
 

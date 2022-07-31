@@ -21,13 +21,20 @@ impl client::Handler for Handler {
     }
 
     fn check_server_key(self, server_public_key: &key::PublicKey) -> Self::FutureBool {
-        println!("server public key {:?}", server_public_key);
+        log::debug!("server public key {:?}", server_public_key);
         self.finished_bool(true)
     }
 
-    fn channel_open_forwarded_tcpip(self, _channel: russh::ChannelId, connected_address: &str, connected_port: u32, originator_address: &str, originator_port: u32, session: client::Session) -> Self::FutureUnit {
-        println!("new channel: {} {} {} {}", connected_address, connected_port, originator_address, originator_port);
+    fn server_channel_open_forwarded_tcpip(
+        self,
+        channel: russh::Channel<russh::client::Msg>,
+        connected_address: &str,
+        connected_port: u32,
+        originator_address: &str,
+        originator_port: u32,
+        session: russh::client::Session,
+    ) -> Self::FutureUnit {
+        log::debug!("new channel: {} {} {} {}", connected_address, connected_port, originator_address, originator_port);
         self.finished(session)
     }
-
 }

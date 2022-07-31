@@ -41,7 +41,7 @@ impl Session {
         let s = match self {
             Self::Ssh(s) => {
                 let ch = s.local_tunnel(host, port).await?;
-                AsyncStream::Ssh(ssh::SshStream::from(ch))
+                AsyncStream::Ssh(ssh::SSHStream::from(ch))
             }
         };
         Ok(s)
